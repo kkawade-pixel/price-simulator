@@ -19,25 +19,12 @@
         input[type=number] {
             -moz-appearance: textfield;
         }
-        /* --- ここからアニメーション用のCSSを追加 --- */
-
-        /* 全ての要素に滑らかな変化を適用 */
-        * {
-            transition: all 0.2s ease-in-out;
+        .details-toggle-icon {
+            transition: transform 0.3s;
         }
-
-        /* 入力欄のフォーカスアニメーション */
-        input[type=number]:focus {
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
-            border-color: #6366f1; /* indigo-500 */
+        .details-toggle-icon.open {
+            transform: rotate(180deg);
         }
-
-        /* ボタンのホバーアニメーション */
-        button:hover {
-            transform: translateY(-2px);
-            filter: brightness(1.05);
-        }
-        
         /* トグルで開閉するセクションのスタイル */
         .collapsible {
             max-height: 0;
@@ -50,14 +37,6 @@
             max-height: 1000px; /* 十分な高さを確保 */
             opacity: 1;
             transform: translateY(0);
-        }
-
-        /* アイコンの回転アニメーション */
-        .details-toggle-icon {
-            transition: transform 0.3s;
-        }
-        .details-toggle-icon.open {
-            transform: rotate(180deg);
         }
     </style>
 </head>
@@ -77,7 +56,7 @@
                 <div>
                     <label for="numVehicles" class="block text-sm font-medium text-gray-700 mb-2">契約台数</label>
                     <div class="relative">
-                        <input type="number" id="numVehicles" min="1" value="1" class="w-full p-3 pr-10 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-lg" placeholder="例: 6">
+                        <input type="number" id="numVehicles" min="1" value="1" class="w-full p-3 pr-10 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-lg" placeholder="例: 1">
                         <span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">台</span>
                     </div>
                 </div>
@@ -85,7 +64,7 @@
                 <div>
                     <label for="numMonths" class="block text-sm font-medium text-gray-700 mb-2">契約月数</label>
                     <div class="relative">
-                        <input type="number" id="numMonths" min="1" value="12" class="w-full p-3 pr-12 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-lg" placeholder="例: 12">
+                        <input type="number" id="numMonths" min="1" value="1" class="w-full p-3 pr-12 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-lg" placeholder="例: 1">
                          <span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">ヶ月</span>
                     </div>
                 </div>
@@ -106,12 +85,12 @@
                 <h2 class="text-xl font-semibold text-gray-800 mb-4">お見積もり結果</h2>
                 
                 <div class="flex justify-between items-center bg-gray-50 p-4 rounded-lg">
-                    <span class="text-gray-600">初期費用 (税抜)</span>
+                    <span class="text-gray-600">初期費用</span>
                     <span id="initialCost" class="text-xl font-medium text-gray-900">0円</span>
                 </div>
 
-                <div class="flex justify-between items-center bg-indigo-600 text-white p-5 rounded-lg">
-                    <span class="text-lg font-semibold">月額利用料金 (税抜)</span>
+                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center bg-indigo-600 text-white p-5 rounded-lg">
+                    <span class="text-lg font-semibold">月額利用料金</span>
                     <span id="monthlyCost" class="text-3xl font-bold">0円</span>
                 </div>
 
@@ -127,7 +106,7 @@
                 <div id="detailsSection" class="collapsible">
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
                         <div class="flex justify-between items-center bg-gray-50 p-4 rounded-lg">
-                            <span class="text-gray-600">総支払額 (税抜)</span>
+                            <span class="text-gray-600">総支払額</span>
                             <span id="totalCost" class="text-xl font-medium text-gray-900">0円</span>
                         </div>
                         <div class="flex justify-between items-center bg-gray-50 p-4 rounded-lg">
@@ -259,6 +238,7 @@
                 <div>
                     <p class="font-semibold mb-2">【料金体系】</p>
                     <ul class="list-disc list-inside space-y-1">
+                        <li>本シミュレーターの金額は税抜です。実際のお支払いには別途消費税がかかります。</li>
                         <li><strong>初期費用:</strong> ${formatter.format(totalVarCostPerVehicle)}円 × 台数 + ${formatter.format(totalFixedCost)}円</li>
                         <li><strong>月額広告運用費:</strong>
                             <ul class="list-['–'] list-inside ml-4">
@@ -266,7 +246,6 @@
                                 <li>5台目以降: ${formatter.format(monthlyCostTier2)}円/台</li>
                             </ul>
                         </li>
-                        <li>本シミュレーターの金額は税抜です。実際のお支払いには別途消費税がかかります。</li>
                         <li>正式な金額については、別途お見積書を発行いたします。</li>
                     </ul>
                 </div>
@@ -274,7 +253,7 @@
                     <p class="font-semibold mb-2">【リーチ数の計算方法】</p>
                     <ul class="list-disc list-inside space-y-1">
                         <li>50km/日/台の走行を想定。</li>
-                        <li>一般的に、1kmの走行時に1㎡の車体利用広告がリーチするのは12人であると言われています。<br>&emsp;※参考：<a href="https://akikawa.info/%E8%BC%B8%E9%80%81%E3%83%88%E3%83%A9%E3%83%83%E3%82%AF%E3%81%AE%E5%BA%83%E5%91%8A%E5%AA%92%E4%BD%93%E3%81%A8%E3%81%97%E3%81%A6%E3%81%AE%E6%B4%BB%E7%94%A8%E3%81%A8%E3%81%9D%E3%81%AE%E5%BA%83%E5%91%8A/" target="_blank" rel="noopener noreferrer" class="text-indigo-600 hover:underline">輸送トラックの広告媒体としての活用とその広告効果の分析(2017)</a></li>
+                        <li>一般的に、1kmの走行時に1㎡の車体利用広告がリーチするのは12人であると言われています。<br>&emsp;※参考：<a href="https://akikawa.info/%E8%BC%B8%E9%80%S1%E3%83%88%E3%83%A9%E3%83%83%E3%82%AF%E3%81%AE%E5%BA%83%E5%91%8A%E5%AA%92%E4%BD%93%E3%81%A8%E3%81%97%E3%81%A6%E3%81%AE%E6%B4%BB%E7%94%A8%E3%81%A8%E3%81%9D%E3%81%AE%E5%BA%83%E5%91%8A/" target="_blank" rel="noopener noreferrer" class="text-indigo-600 hover:underline">輸送トラックの広告媒体としての活用とその広告効果の分析(2017)</a></li>
                     </ul>
                 </div>
             `;
